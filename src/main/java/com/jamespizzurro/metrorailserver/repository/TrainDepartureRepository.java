@@ -81,7 +81,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.train_id END) AS train_id, " +
                     "      (CASE WHEN row_number() OVER ( " +
                     "        PARTITION BY " +
@@ -90,7 +90,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.real_train_id END) AS real_train_id, " +
                     "      scheduled.departure_station_name AS departure_station_name, " +
                     "      scheduled.departure_station_code AS departure_station_code, " +
@@ -107,7 +107,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.destination_station_name END) AS observed_destination_station_name, " +
                     "      (CASE WHEN row_number() OVER ( " +
                     "        PARTITION BY " +
@@ -116,7 +116,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.destination_station_code END) AS observed_destination_station_code, " +
                     "      (CASE WHEN row_number() OVER ( " +
                     "        PARTITION BY " +
@@ -125,7 +125,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.num_cars END) AS observed_num_cars, " +
                     "      (CASE WHEN row_number() OVER ( " +
                     "        PARTITION BY " +
@@ -134,7 +134,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.departure_time END) AS observed_departure_time, " +
                     "      scheduled.departure_time AS scheduled_departure_time, " +
                     "      (CASE WHEN row_number() OVER ( " +
@@ -144,7 +144,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN observed.time_since_last_departure END) AS observed_time_since_last_departure, " +
                     "      scheduled.time_since_last_departure AS scheduled_time_since_last_departure, " +
                     "      (CASE WHEN row_number() OVER ( " +
@@ -154,7 +154,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN (observed.time_since_last_departure - scheduled.time_since_last_departure) END) AS headway_deviation, " +
                     "      (CASE WHEN row_number() OVER ( " +
                     "        PARTITION BY " +
@@ -163,7 +163,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "          scheduled.direction_number, " +
                     "          observed.departure_time " +
                     "        ORDER BY " +
-                    "          scheduled.departure_time <-> observed.departure_time " +
+                    "          scheduled.departure_time - observed.departure_time " +
                     "       ) = 1 THEN (interval_to_seconds(observed.departure_time - scheduled.departure_time) / 60) END) AS schedule_deviation " +
                     "    FROM ( " +
                     "      SELECT " +
@@ -221,7 +221,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "        observed.departure_time BETWEEN (scheduled.departure_time - INTERVAL '3 hours') AND (scheduled.departure_time + INTERVAL '3 hours') AND " +
                     "        observed.type = 'OBSERVED' " +
                     "      ORDER BY " +
-                    "        observed.departure_time <-> scheduled.departure_time " +
+                    "        observed.departure_time - scheduled.departure_time " +
                     "      LIMIT 1 " +
                     "    ) AS observed ON TRUE " +
                     "    ORDER BY " +
@@ -229,7 +229,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "      scheduled.line_code, " +
                     "      scheduled.direction_number, " +
                     "      scheduled.departure_time, " +
-                    "      scheduled.departure_time <-> observed.departure_time " +
+                    "      scheduled.departure_time - observed.departure_time " +
                     "  ) AS scheduled " +
                     "  FULL OUTER JOIN ( " +
                     "    SELECT " +
@@ -299,7 +299,7 @@ public interface TrainDepartureRepository extends CrudRepository<TrainDeparture,
                     "        scheduled.departure_time BETWEEN (observed.departure_time - INTERVAL '3 hours') AND (observed.departure_time + INTERVAL '3 hours') AND " +
                     "        scheduled.type = 'SCHEDULED' " +
                     "      ORDER BY " +
-                    "        scheduled.departure_time <-> observed.departure_time " +
+                    "        scheduled.departure_time - observed.departure_time " +
                     "      LIMIT 1 " +
                     "    ) AS scheduled ON TRUE " +
                     "  ) AS observed ON ( " +
