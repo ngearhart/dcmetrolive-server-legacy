@@ -743,10 +743,11 @@ public class TwitterBotService {
         }
 
         TweetData tweetData = new TweetData(text, lineCodes);
-        this.tweetQueue.addLast(tweetData);
+        // this.tweetQueue.addLast(tweetData);
     }
 
-    @Scheduled(cron = "*/15 * * * * *")    // run every 15 seconds
+    // TODO: reenable. Twitter disabled for now
+    // @Scheduled(cron = "*/15 * * * * *")    // run every 15 seconds
     private void tweet() {
         if (this.isDataStale.get()) {
             return;

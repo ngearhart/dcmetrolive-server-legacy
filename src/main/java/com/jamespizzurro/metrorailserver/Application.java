@@ -80,33 +80,16 @@ public class Application implements WebMvcConfigurer, AsyncConfigurer {
 
     @Bean
     public ServletWebServerFactory servletContainer() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
-                securityConstraint.addCollection(collection);
-                context.addConstraint(securityConstraint);
-            }
-        };
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
         tomcat.addAdditionalTomcatConnectors(createHttpConnector());
-        tomcat.addContextCustomizers(context -> {
-            NullRealm realm = new NullRealm();
-            realm.setTransportGuaranteeRedirectStatus(301);
-            context.setRealm(realm);
-        });
         return tomcat;
     }
 
     private Connector createHttpConnector() {
-        Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-        connector.setScheme("http");
-        connector.setSecure(false);
-        connector.setPort(this.configUtil.isDevelopmentMode() ? 8080 : 80);
-        connector.setRedirectPort(this.configUtil.isDevelopmentMode() ? 9443 : 443);
-        return connector;
+         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+         connector.setPort(8080);
+         return connector;
+ 
     }
 
     @Override
