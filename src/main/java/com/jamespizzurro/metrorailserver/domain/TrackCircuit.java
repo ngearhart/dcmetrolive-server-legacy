@@ -75,6 +75,8 @@ public class TrackCircuit {
             }
         }
 
+        logger.debug(toString() + ":findParentStationCodes:" + stationCodes);
+
         return stationCodes;
     }
     public Set<String> findChildStationCodes() {
@@ -233,6 +235,6 @@ public class TrackCircuit {
 
     @Override
     public String toString() {
-        return "TrackCircuit(" + ")";
+        return "id=" + this.id + ",station=" + this.stationCode + "";
     }
 }
