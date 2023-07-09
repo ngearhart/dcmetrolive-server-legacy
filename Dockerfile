@@ -5,9 +5,11 @@ WORKDIR /app
 
 COPY . .
 
-RUN mvn clean install 
+RUN mvn clean install
+# Setting for docker-compose
+CMD mvn spring-boot:run
 
-FROM openjdk:11-slim-bullseye
+FROM openjdk:11-slim-bullseye AS final
 
 RUN mkdir /app
 WORKDIR /app

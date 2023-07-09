@@ -2,7 +2,13 @@ package com.jamespizzurro.metrorailserver.domain;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+// TODO: This can definitely use a more efficient data structure
 public class TrackCircuit {
+
+    private static final Logger logger = LoggerFactory.getLogger(TrackCircuit.class);
 
     public static final String INDETERMINATE = "INDETERMINATE";
     public static boolean isNextStationCodeIndeterminate(String nextStationCode) {
@@ -64,7 +70,9 @@ public class TrackCircuit {
         }
 
         for (TrackCircuit parentCircuit : getParentNeighbors()) {
-            stationCodes = parentCircuit.findParentStationCodes(stationCodes);
+            if (parentCircuit != this) { // TODO: Track down why a circuit is referencing itself.
+                stationCodes = parentCircuit.findParentStationCodes(stationCodes);
+            }
         }
 
         return stationCodes;
@@ -78,7 +86,9 @@ public class TrackCircuit {
         }
 
         for (TrackCircuit childCircuit : getChildNeighbors()) {
-            stationCodes = childCircuit.findChildStationCodes(stationCodes);
+            if (childCircuit != this) { // TODO: Track down why a circuit is referencing itself.
+                stationCodes = childCircuit.findChildStationCodes(stationCodes);
+            }
         }
 
         return stationCodes;
@@ -96,7 +106,9 @@ public class TrackCircuit {
         }
 
         for (TrackCircuit parentCircuit : getParentNeighbors()) {
-            stationCodes = parentCircuit.findNextParentStationCodes(stationCodes);
+            if (parentCircuit != this) { // TODO: Track down why a circuit is referencing itself.
+                stationCodes = parentCircuit.findNextParentStationCodes(stationCodes);
+            }
         }
         return stationCodes;
     }
@@ -112,7 +124,9 @@ public class TrackCircuit {
         }
 
         for (TrackCircuit childCircuit : getChildNeighbors()) {
-            stationCodes = childCircuit.findNextChildStationCodes(stationCodes);
+            if (childCircuit != this) { // TODO: Track down why a circuit is referencing itself.
+                stationCodes = childCircuit.findNextChildStationCodes(stationCodes);
+            }
         }
         return stationCodes;
     }
@@ -215,5 +229,10 @@ public class TrackCircuit {
 
     public void setNumSecondsEstimatedTrackDelays(int numSecondsEstimatedTrackDelays) {
         this.numSecondsEstimatedTrackDelays = numSecondsEstimatedTrackDelays;
+    }
+
+    @Override
+    public String toString() {
+        return "TrackCircuit(" + ")";
     }
 }

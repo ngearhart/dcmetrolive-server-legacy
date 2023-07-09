@@ -19,3 +19,5 @@ target
 /logs/
 
 /track-circuit-diagram.gv.txt
+
+.env
